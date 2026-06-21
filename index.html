@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" id="awt" content="WatchPro">
+<meta name="theme-color" id="thm" content="#0A0A0A">
+<title id="dt">WatchPro</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.14.0/dist/tabler-icons.min.css">
+<style>
+:root{
+--bg:#0A0A0A;--s1:#111;--s2:#1A1A1A;--s3:#222;--s4:#2C2C2C;
+--br:#2A2A2A;--br2:#363636;
+--t1:#F0F0F0;--t2:#999;--t3:#555;
+--gr:#00C896;--grd:rgba(0,200,150,.12);--grt:#00E6A8;
+--or:#F5A623;--ord:rgba(245,166,35,.11);
+--re:#FF4D4D;--red:rgba(255,77,77,.11);
+--bl:#4D9EFF;--bld:rgba(77,158,255,.11);
+--pu:#A78BFA;
+--f:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{font-family:var(--f);background:var(--bg);color:var(--t1);max-width:480px;margin:0 auto;min-height:100%;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:80;height:56px;background:rgba(10,10,10,.96);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;padding:0 15px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+#hlogo{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+#hico{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--gr),#00a870);display:flex;align-items:center;justify-content:center;font-size:19px;overflow:hidden;flex-shrink:0;box-shadow:0 2px 14px rgba(0,200,150,.22);transition:transform .15s}
+#hico img{width:100%;height:100%;object-fit:cover;border-radius:11px}
+#hlogo:active #hico{transform:scale(.9)}
+#hname{font-size:16px;font-weight:800;letter-spacing:-.3px}
+#hdate{font-size:10px;color:var(--t3);margin-top:1px}
+#hpill{background:var(--grd);border:1px solid rgba(0,200,150,.18);border-radius:20px;padding:5px 11px;font-size:11px;font-weight:700;color:var(--grt);white-space:nowrap}
+
+/* NAV */
+#nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:80;display:flex;background:var(--s1);border-top:1px solid var(--br);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 7px;border:none;background:transparent;color:var(--t3);font-size:10px;font-weight:600;font-family:var(--f);cursor:pointer;transition:color .15s;-webkit-tap-highlight-color:transparent}
+.nb i{font-size:21px;transition:transform .12s}
+.nb.on{color:var(--gr)}
+.nb.on i{transform:translateY(-1px)}
+.nd{width:4px;height:4px;border-radius:50%;background:var(--gr);display:none}
+.nb.on .nd{display:block}
+
+/* CONTENT */
+#wrap{padding:13px 13px 84px}
+.pg{display:none}.pg.on{display:block}
+
+/* METRICS */
+.mgg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:15px}
+.mc{background:var(--s1);border-radius:13px;padding:14px 13px;border:1px solid var(--br);position:relative;overflow:hidden}
+.mc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:13px 13px 0 0}
+.mc.cg::after{background:linear-gradient(90deg,var(--gr),transparent)}
+.mc.co::after{background:linear-gradient(90deg,var(--or),transparent)}
+.mc.cb::after{background:linear-gradient(90deg,var(--bl),transparent)}
+.mc.cp::after{background:linear-gradient(90deg,var(--pu),transparent)}
+.ml{font-size:10px;color:var(--t3);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.mv{font-size:20px;font-weight:800;letter-spacing:-.4px}
+.mv.g{color:var(--gr)}.mv.o{color:var(--or)}.mv.b{color:var(--bl)}.mv.p{color:var(--pu)}
+
+/* CARD */
+.cd{background:var(--s1);border-radius:16px;border:1px solid var(--br);margin-bottom:13px;overflow:hidden}
+.cdh{padding:13px 15px;border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between}
+.cdt{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
+.cdt i{color:var(--gr)}
+
+/* SEARCH */
+.srw{position:relative;margin-bottom:13px}
+.srw i.ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:17px;pointer-events:none}
+.sri{width:100%;padding:11px 13px 11px 38px;background:var(--s2);border:1.5px solid var(--br);border-radius:13px;font-size:14px;color:var(--t1);outline:none;font-family:var(--f);transition:border-color .18s}
+.sri:focus{border-color:var(--gr)}
+.sri::placeholder{color:var(--t3)}
+
+/* WATCH ITEM */
+.wi{padding:13px;border-bottom:1px solid var(--br)}
+.wi:last-child{border-bottom:none}
+.wt{display:flex;align-items:flex-start;gap:10px}
+.wa{width:42px;height:42px;border-radius:11px;background:var(--s2);border:1px solid var(--br);display:flex;align-items:center;justify-content:center;color:var(--gr);font-size:19px;flex-shrink:0}
+.wn{font-size:14px;font-weight:700;line-height:1.3}
+.wm{font-size:11px;color:var(--t3);margin-top:2px}
+.pg3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px;background:var(--s2);border-radius:10px;padding:10px}
+.p3l{font-size:10px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.p3v{font-size:12px;font-weight:700}
+.p3v.g{color:var(--gr)}.p3v.o{color:var(--or)}
+.pb{margin-top:9px}
+.pbt{height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
+.pbf{height:100%;border-radius:3px;transition:width .5s}
+.pbl{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:3px;font-weight:600}
+.ar{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
+.ab{padding:8px 12px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;border:none;display:flex;align-items:center;gap:5px;font-family:var(--f);transition:opacity .12s}
+.ab:active{opacity:.6}
+.abs{background:var(--gr);color:#000}
+.abt{background:var(--bld);color:var(--bl);border:1px solid rgba(77,158,255,.2)}
+.abe{background:var(--ord);color:var(--or);border:1px solid rgba(245,166,35,.2)}
+
+/* BADGE */
+.bdg{display:inline-flex;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.bgg{background:rgba(0,200,150,.12);color:var(--gr)}
+.bgo{background:var(--ord);color:var(--or)}
+.bgr{background:var(--red);color:var(--re)}
+
+/* FORM */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.fg label{font-size:11px;color:var(--t2);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.fi{width:100%;padding:12px 13px;border:1.5px solid var(--br);border-radius:11px;font-size:15px;background:var(--s2);color:var(--t1);outline:none;font-family:var(--f);transition:border-color .18s}
+.fi:focus{border-color:var(--gr)}
+.fi::placeholder{color:var(--t3)}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pbx{background:var(--s2);border-radius:11px;padding:12px;font-size:13px;font-weight:700;text-align:center;margin-bottom:12px;color:var(--t3);border:1px solid var(--br);line-height:1.5}
+.btn{width:100%;padding:14px;border:none;border-radius:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--f);display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .15s}
+.btn:active{opacity:.78}
+.btng{background:linear-gradient(135deg,var(--gr),#00a870);color:#000;box-shadow:0 4px 16px rgba(0,200,150,.2)}
+.btnb{background:linear-gradient(135deg,var(--bl),#2878d8);color:#fff;box-shadow:0 4px 16px rgba(77,158,255,.18)}
+.btnr{background:linear-gradient(135deg,var(--re),#c81c1c);color:#fff;box-shadow:0 4px 16px rgba(255,77,77,.18)}
+.btno{background:linear-gradient(135deg,var(--or),#d07010);color:#000;box-shadow:0 4px 16px rgba(245,166,35,.18)}
+
+/* MODAL */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.84);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:fi .2s}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.mb{background:var(--s1);border-radius:22px 22px 0 0;padding:19px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;max-height:92vh;overflow-y:auto;border-top:1px solid var(--br);animation:su .22s cubic-bezier(.4,0,.2,1)}
+@keyframes su{from{transform:translateY(36px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mhd{width:34px;height:4px;background:var(--br2);border-radius:2px;margin:0 auto 17px}
+.mt{font-size:16px;font-weight:800;margin-bottom:15px;display:flex;align-items:center;gap:9px}
+.qc{display:flex;align-items:center;gap:18px;justify-content:center;margin:13px 0}
+.qb{width:44px;height:44px;border-radius:11px;border:1px solid var(--br);background:var(--s2);cursor:pointer;font-size:22px;color:var(--t1);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:var(--f)}
+.qv{font-size:28px;font-weight:800;min-width:42px;text-align:center}
+.dv{height:1px;background:var(--br);margin:15px 0}
+.sl{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px}
+.gbt{width:100%;padding:13px;background:transparent;border:1.5px solid var(--br);border-radius:13px;color:var(--t2);font-size:14px;font-weight:600;cursor:pointer;margin-top:7px;font-family:var(--f)}
+.gbt.r{color:var(--re);border-color:rgba(255,77,77,.25)}
+
+/* TOAST */
+#tst{position:fixed;top:64px;left:50%;transform:translateX(-50%) translateY(-12px);background:var(--s2);border:1px solid var(--br);border-radius:11px;padding:10px 18px;font-size:13px;font-weight:700;z-index:500;opacity:0;transition:all .26s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;max-width:92%;text-align:center}
+#tst.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#tst.ok{border-color:rgba(0,200,150,.4);color:var(--grt)}
+#tst.er{border-color:rgba(255,77,77,.4);color:var(--re)}
+
+/* FILTER TABS */
+.ftb{display:flex;gap:6px;margin-bottom:13px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ftb::-webkit-scrollbar{display:none}
+.ft{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--br);background:var(--s2);color:var(--t3);white-space:nowrap;transition:all .16s;font-family:var(--f)}
+.ft.on{background:var(--grd);color:var(--grt);border-color:rgba(0,200,150,.28)}
+
+/* SALE ROW */
+.sr{padding:12px 13px;border-bottom:1px solid var(--br);position:relative}
+.sr:last-child{border-bottom:none}
+.und{position:absolute;top:12px;right:12px;background:var(--red);color:var(--re);border:1px solid rgba(255,77,77,.2);border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--f)}
+
+/* STATS ROW */
+.str{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:13px}
+.stc{background:var(--s1);border-radius:13px;padding:12px 9px;border:1px solid var(--br);text-align:center}
+.stv{font-size:16px;font-weight:800}
+.stl{font-size:10px;color:var(--t3);margin-top:4px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+
+/* BAR CHART */
+.br_w{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.br_l{font-size:12px;color:var(--t2);width:76px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.br_t{flex:1;height:7px;background:var(--s3);border-radius:4px;overflow:hidden}
+.br_f{height:100%;border-radius:4px;transition:width .55s ease}
+.br_v{font-size:11px;font-weight:700;width:40px;text-align:right;flex-shrink:0}
+.lowr{padding:11px 13px;border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between}
+.lowr:last-child{border-bottom:none}
+.emp{text-align:center;padding:26px 15px;color:var(--t3);font-size:14px;line-height:1.8}
+.sh{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px;padding-left:1px}
+
+/* SETTINGS */
+.ss{margin-bottom:18px}
+.sst{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px;padding-left:1px}
+.sg{background:var(--s1);border:1px solid var(--br);border-radius:13px;overflow:hidden}
+.si{padding:13px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--br);cursor:pointer;transition:background .13s}
+.si:last-child{border-bottom:none}
+.si:active{background:var(--s2)}
+.sil{display:flex;align-items:center;gap:11px}
+.sic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.siT{font-size:14px;font-weight:700}
+.siS{font-size:12px;color:var(--t3);margin-top:1px}
+.wr{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:12px;padding:11px 13px;display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--or);line-height:1.6;margin-top:9px}
+.wr i{flex-shrink:0;margin-top:1px}
+
+/* LOGO SETTINGS */
+.lpv{display:flex;flex-direction:column;align-items:center;gap:11px;padding:18px;background:var(--s2);border-radius:13px;margin-bottom:15px;border:1px solid var(--br)}
+.lpi{width:74px;height:74px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;box-shadow:0 0 20px rgba(0,200,150,.2);transition:all .28s}
+.lpi img{width:100%;height:100%;object-fit:cover;border-radius:20px}
+.lpn{font-size:18px;font-weight:800}
+.lpt{font-size:12px;color:var(--t3)}
+.egg{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-bottom:13px}
+.eb{aspect-ratio:1;background:var(--s2);border:1.5px solid var(--br);border-radius:10px;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .14s;font-family:var(--f)}
+.eb.on{border-color:var(--gr);background:var(--grd)}
+.swg{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:15px}
+.sw{width:38px;height:38px;border-radius:50%;cursor:pointer;border:3px solid transparent;position:relative;flex-shrink:0;transition:all .16s}
+.sw.on{border-color:rgba(255,255,255,.65);transform:scale(1.12)}
+.sw.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+/* GALLERY UPLOAD */
+.upa{border:2px dashed var(--br2);border-radius:13px;padding:17px;text-align:center;cursor:pointer;transition:all .18s;margin-bottom:13px;position:relative}
+.upa:active,.upa.hi{border-color:var(--gr);border-style:solid;background:var(--grd)}
+.upimg{width:76px;height:76px;border-radius:14px;object-fit:cover;margin-bottom:7px}
+.upt{font-size:13px;font-weight:700;color:var(--t2);margin-top:5px}
+.ups{font-size:11px;color:var(--t3);margin-top:2px}
+.rmb{position:absolute;top:9px;right:9px;background:var(--red);color:var(--re);border:none;border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--f)}
+
+/* EXPORT */
+.exr{padding:15px;display:flex;align-items:center;gap:13px;border-bottom:1px solid var(--br);cursor:pointer;transition:background .13s}
+.exr:last-child{border-bottom:none}
+.exr:active{background:var(--s2)}
+.exi{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.exT{font-size:14px;font-weight:700}
+.exS{font-size:12px;color:var(--t3);margin-top:2px}
+
+/* INSTALL GUIDE */
+.idev{background:var(--s2);border-radius:13px;padding:15px;margin-bottom:11px;border:1px solid var(--br)}
+.idh{font-size:13px;font-weight:800;margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.ist{display:flex;align-items:flex-start;gap:9px;margin-bottom:8px;font-size:13px;color:var(--t2);line-height:1.6}
+.ist:last-child{margin-bottom:0}
+.isn{width:21px;height:21px;border-radius:50%;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.itip{background:var(--grd);border:1px solid rgba(0,200,150,.18);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--grt);margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;line-height:1.6}
+.itip i{flex-shrink:0;margin-top:1px}
+
+/* DOWNLOAD BANNER - BIG BUTTON ON SETTINGS */
+.dlbig{background:linear-gradient(135deg,var(--gr),#00a870);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:9px;box-shadow:0 6px 20px rgba(0,200,150,.22);transition:opacity .15s}
+.dlbig:active{opacity:.82}
+.dlbig-ico{width:48px;height:48px;background:rgba(0,0,0,.18);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.dlbig-t{font-size:15px;font-weight:800;color:#000}
+.dlbig-s{font-size:12px;color:rgba(0,0,0,.6);margin-top:3px}
+</style>
+</head>
+<body>
+<div id="tst"></div>
+
+<!-- HEADER -->
+<div id="hdr">
+  <div id="hlogo" onclick="openLogo()">
+    <div id="hico"><span id="hemo">&#x231A;</span></div>
+    <div>
+      <div id="hname">WatchPro</div>
+      <div id="hdate"></div>
+    </div>
+  </div>
+  <div id="hpill">Rs 0 profit</div>
+</div>
+
+<!-- PAGES -->
+<div id="wrap">
+
+<!-- DASHBOARD -->
+<div class="pg on" id="pg-db">
+  <div class="mgg">
+    <div class="mc cg"><div class="ml">Total Stock</div><div class="mv" id="m1">0</div></div>
+    <div class="mc co"><div class="ml">Stock Value</div><div class="mv o" id="m2">Rs 0</div></div>
+    <div class="mc cg"><div class="ml">Total Profit</div><div class="mv g" id="m3">Rs 0</div></div>
+    <div class="mc cp"><div class="ml">Avg Margin</div><div class="mv p" id="m4">0%</div></div>
+  </div>
+  <div class="sh">Profit Margin per Watch</div>
+  <div class="cd"><div style="padding:13px" id="dchart"><div class="emp">No watches added yet</div></div></div>
+  <div class="sh">Low Stock Alerts</div>
+  <div class="cd"><div id="dlow"><div class="emp">All stock levels OK &#10003;</div></div></div>
+</div>
+
+<!-- STOCK -->
+<div class="pg" id="pg-st">
+  <div class="srw"><i class="ti ti-search ic"></i><input class="sri" type="text" id="sri" placeholder="Search name, brand or model&#8230;" oninput="rStock()"></div>
+  <div class="cd">
+    <div class="cdh"><span class="cdt"><i class="ti ti-package"></i>My Watches</span><span id="scnt" style="font-size:12px;color:var(--t3);font-weight:600"></span></div>
+    <div id="slist"><div class="emp">No watches yet. Use Add tab.</div></div>
+  </div>
+</div>
+
+<!-- ADD -->
+<div class="pg" id="pg-ad">
+  <div class="cd">
+    <div class="cdh"><span class="cdt"><i class="ti ti-plus"></i>Add New Watch</span></div>
+    <div style="padding:15px">
+      <div class="fg"><label>Watch Name *</label><input class="fi" type="text" id="wn" placeholder="e.g. Casio G-Shock GA-100"></div>
+      <div class="fr2"><div class="fg"><label>Brand *</label><input class="fi" type="text" id="wb" placeholder="Casio"></div><div class="fg"><label>Model No.</label><input class="fi" type="text" id="wmo" placeholder="GA-100"></div></div>
+      <div class="fr2"><div class="fg"><label>Quantity *</label><input class="fi" type="number" id="wq" placeholder="10" min="1" inputmode="numeric"></div><div class="fg"><label>Buy Price (Rs) *</label><input class="fi" type="number" id="wbp" placeholder="5000" inputmode="numeric"></div></div>
+      <div class="fg"><label>Sell Price (Rs) *</label><input class="fi" type="number" id="wsp" placeholder="8000" inputmode="numeric"></div>
+      <div class="pbx" id="pp">Enter buy &amp; sell price &#8212; profit preview will appear here</div>
+      <button class="btn btng" onclick="addW()"><i class="ti ti-check"></i>Add Watch</button>
+    </div>
+  </div>
+</div>
+
+<!-- SALES -->
+<div class="pg" id="pg-sl">
+  <div class="str">
+    <div class="stc"><div class="stv b" id="s1">0</div><div class="stl">Sales</div></div>
+    <div class="stc"><div class="stv o" id="s2">Rs 0</div><div class="stl">Revenue</div></div>
+    <div class="stc"><div class="stv g" id="s3">Rs 0</div><div class="stl">Profit</div></div>
+  </div>
+  <div class="ftb">
+    <div class="ft on" onclick="sF('all',this)">All Time</div>
+    <div class="ft" onclick="sF('today',this)">Today</div>
+    <div class="ft" onclick="sF('week',this)">This Week</div>
+    <div class="ft" onclick="sF('month',this)">This Month</div>
+  </div>
+  <div class="cd">
+    <div class="cdh">
+      <span class="cdt"><i class="ti ti-receipt"></i>Sales History</span>
+      <button onclick="oExp()" style="background:var(--s2);border:1px solid var(--br);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--t2);cursor:pointer;display:flex;align-items:center;gap:4px;font-family:var(--f)"><i class="ti ti-download" style="font-size:13px"></i>Export</button>
+    </div>
+    <div id="slog"><div class="emp">No sales recorded yet.</div></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="pg" id="pg-se">
+
+  <!-- BIG DOWNLOAD BUTTON - MOST PROMINENT -->
+  <div class="dlbig" onclick="dlApp()">
+    <div class="dlbig-ico"><i class="ti ti-device-mobile-down" style="color:#fff;font-size:24px"></i></div>
+    <div>
+      <div class="dlbig-t">&#11015; Download App</div>
+      <div class="dlbig-s">Save to phone &amp; install on home screen</div>
+    </div>
+  </div>
+
+  <div class="ss">
+    <div class="sst">Store Identity</div>
+    <div class="sg">
+      <div class="si" onclick="openLogo()">
+        <div class="sil"><div class="sic" style="background:var(--grd)"><i class="ti ti-building-store" style="color:var(--gr)"></i></div><div><div class="siT">Store Name &amp; Logo</div><div class="siS" id="sname">WatchPro</div></div></div>
+        <i class="ti ti-chevron-right" style="color:var(--t3)"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="ss">
+    <div class="sst">Installation</div>
+    <div class="sg">
+      <div class="si" onclick="showGuide()">
+        <div class="sil"><div class="sic" style="background:var(--grd)"><i class="ti ti-info-circle" style="color:var(--gr)"></i></div><div><div class="siT">How to Install</div><div class="siS">Step-by-step guide</div></div></div>
+        <i class="ti ti-chevron-right" style="color:var(--t3)"></i>
+      </div>
+    </div>
+    <div class="wr" style="background:var(--grd);border-color:rgba(0,200,150,.2);color:var(--grt)">
+      <i class="ti ti-bulb"></i>
+      <span><b>How it works:</b> Tap Download above &#8594; File saves to your phone &#8594; Open it in Chrome/Safari &#8594; Add to Home Screen &#8594; Done! Runs like a real app.</span>
+    </div>
+  </div>
+
+  <div class="ss">
+    <div class="sst">Data</div>
+    <div class="sg">
+      <div class="si" onclick="oExp()">
+        <div class="sil"><div class="sic" style="background:var(--bld)"><i class="ti ti-download" style="color:var(--bl)"></i></div><div><div class="siT">Export Data</div><div class="siS">CSV or JSON backup</div></div></div>
+        <i class="ti ti-chevron-right" style="color:var(--t3)"></i>
+      </div>
+      <div class="si" onclick="document.getElementById('ifl').click()">
+        <div class="sil"><div class="sic" style="background:rgba(167,139,250,.1)"><i class="ti ti-upload" style="color:var(--pu)"></i></div><div><div class="siT">Import Backup</div><div class="siS">Restore from JSON file</div></div></div>
+        <i class="ti ti-chevron-right" style="color:var(--t3)"></i>
+      </div>
+      <div class="si" onclick="clrAll()">
+        <div class="sil"><div class="sic" style="background:var(--red)"><i class="ti ti-trash" style="color:var(--re)"></i></div><div><div class="siT" style="color:var(--re)">Delete All Data</div><div class="siS">Permanent</div></div></div>
+        <i class="ti ti-chevron-right" style="color:var(--t3)"></i>
+      </div>
+    </div>
+    <div class="wr"><i class="ti ti-alert-triangle"></i><span>Data stored in this browser only. <b>Export regularly</b> to prevent loss.</span></div>
+  </div>
+
+  <div class="ss">
+    <div class="sst">About</div>
+    <div class="sg">
+      <div class="si" style="cursor:default">
+        <div class="sil"><div class="sic" style="background:var(--s2)"><i class="ti ti-watch" style="color:var(--t3)"></i></div><div><div class="siT">WatchPro</div><div class="siS">Version 3.0 &#8212; Professional</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- NAV -->
+<div id="nav">
+  <button class="nb on" onclick="gp('db',this)"><i class="ti ti-layout-dashboard"></i>Dashboard<div class="nd"></div></button>
+  <button class="nb" onclick="gp('st',this)"><i class="ti ti-package"></i>Stock<div class="nd"></div></button>
+  <button class="nb" onclick="gp('ad',this)"><i class="ti ti-circle-plus"></i>Add<div class="nd"></div></button>
+  <button class="nb" onclick="gp('sl',this)"><i class="ti ti-history"></i>Sales<div class="nd"></div></button>
+  <button class="nb" onclick="gp('se',this)"><i class="ti ti-settings"></i>Settings<div class="nd"></div></button>
+</div>
+
+<div id="ma"></div>
+<input type="file" id="ifl" accept=".json" style="display:none" onchange="doImp(event)">
+<input type="file" id="lgf" accept="image/*" style="display:none" onchange="onLI(event)">
+
+<script>
+// ═══════════ STATE ═══════════
+var W=JSON.parse(localStorage.getItem('wp_w')||'[]');
+var S=JSON.parse(localStorage.getItem('wp_s')||'[]').map(function(s){return Object.assign({},s,{time:new Date(s.time)});});
+var C=JSON.parse(localStorage.getItem('wp_c')||'{}');
+var fil='all';
+
+var EMOJIS=['\u231A','\u{1F570}','\u23F1','\u{1F48E}','\u{1F451}','\u2728','\u{1F31F}','\u{1FAE7}','\u{1F535}','\u{1F7E2}','\u{1F7E1}','\u{1F534}','\u{1F3EA}','\u{1F3EC}','\u{1F48D}','\u{1F3AF}','\u26A1','\u{1F525}','\u{1F4B0}','\u{1F6CD}'];
+var COLS=[{n:'Emerald',h:'#00C896'},{n:'Blue',h:'#4D9EFF'},{n:'Purple',h:'#A78BFA'},{n:'Amber',h:'#F5A623'},{n:'Red',h:'#FF4D4D'},{n:'Pink',h:'#F472B6'},{n:'Cyan',h:'#22D3EE'},{n:'Orange',h:'#FB923C'}];
+
+function sv(){localStorage.setItem('wp_w',JSON.stringify(W));localStorage.setItem('wp_s',JSON.stringify(S));localStorage.setItem('wp_c',JSON.stringify(C));}
+
+// ═══════════ DOWNLOAD APP ═══════════
+function dlApp(){
+  try{
+    // Serialize current data into the HTML so downloaded file has latest data
+    var wj=JSON.stringify(W).replace(/\\/g,'\\\\').replace(/`/g,'\\`');
+    var sj=JSON.stringify(S).replace(/\\/g,'\\\\').replace(/`/g,'\\`');
+    var cj=JSON.stringify(C).replace(/\\/g,'\\\\').replace(/`/g,'\\`');
+    
+    var src=document.documentElement.outerHTML;
+    // Inject saved data so the downloaded file opens with all current data
+    src=src.replace(
+      "var W=JSON.parse(localStorage.getItem('wp_w')||'[]');",
+      "try{localStorage.setItem('wp_w',JSON.stringify("+JSON.stringify(W)+"));}catch(e){}var W=JSON.parse(localStorage.getItem('wp_w')||'[]');"
+    ).replace(
+      "var S=JSON.parse(localStorage.getItem('wp_s')||'[]').map(function(s){return Object.assign({},s,{time:new Date(s.time)});});",
+      "try{localStorage.setItem('wp_s',JSON.stringify("+JSON.stringify(S)+"));}catch(e){}var S=JSON.parse(localStorage.getItem('wp_s')||'[]').map(function(s){return Object.assign({},s,{time:new Date(s.time)});});"
+    ).replace(
+      "var C=JSON.parse(localStorage.getItem('wp_c')||'{}');",
+      "try{localStorage.setItem('wp_c',JSON.stringify("+JSON.stringify(C)+"));}catch(e){}var C=JSON.parse(localStorage.getItem('wp_c')||'{}');"
+    );
+    
+    var fname=(C.storeName||'WatchPro').replace(/\s+/g,'_')+'.html';
+    var blob=new Blob([src],{type:'text/html;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download=fname;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},300);
+    toast('\u2705 '+fname+' downloaded!');
+    setTimeout(showGuide, 1200);
+  }catch(e){
+    toast('\u26A0\uFE0F Download failed: '+e.message,'er');
+  }
+}
+
+// ═══════════ INSTALL GUIDE ═══════════
+function showGuide(){
+  oM('<div class="mhd"></div><div class="mt"><i class="ti ti-device-mobile-down" style="color:var(--gr)"></i>Install on Home Screen</div>'+
+  '<div class="itip"><i class="ti ti-download"></i><span>First download the app file (Settings &#8594; Download App), then follow steps below for your phone.</span></div>'+
+  '<div class="idev"><div class="idh" style="color:#34C759"><span style="font-size:20px">&#129302;</span>Android (Chrome)</div>'+
+  '<div class="ist"><div class="isn" style="background:var(--grd);color:var(--grt)">1</div><span>Open your <b>Downloads</b> folder &#8594; tap the <b>.html file</b></span></div>'+
+  '<div class="ist"><div class="isn" style="background:var(--grd);color:var(--grt)">2</div><span>It opens in Chrome browser automatically</span></div>'+
+  '<div class="ist"><div class="isn" style="background:var(--grd);color:var(--grt)">3</div><span>Tap the <b>&#8942; three-dot menu</b> at top right</span></div>'+
+  '<div class="ist"><div class="isn" style="background:var(--grd);color:var(--grt)">4</div><span>Tap <b>"Add to Home Screen"</b> &#8594; Tap <b>Add</b> &#10003;</span></div></div>'+
+  '<div class="idev"><div class="idh" style="color:var(--bl)"><span style="font-size:20px">&#127822;</span>iPhone / iPad (Safari)</div>'+
+  '<div class="ist"><div class="isn" style="background:var(--bld);color:var(--bl)">1</div><span>Open <b>Files app</b> &#8594; find downloaded file &#8594; tap <b>Share</b> &#8594; open in <b>Safari</b></span></div>'+
+  '<div class="ist"><div class="isn" style="background:var(--bld);color:var(--bl)">2</div><span>Tap <b>Share &#9014;</b> button at the bottom of Safari</span></div>'+
+  '<div class="ist"><div class="isn" style="background:var(--bld);color:var(--bl)">3</div><span>Tap <b>"Add to Home Screen"</b> &#8594; Tap <b>Add</b> &#10003;</span></div></div>'+
+  '<div class="idev"><div class="idh" style="color:var(--pu)"><span style="font-size:20px">&#128187;</span>PC / Desktop (Chrome)</div>'+
+  '<div class="ist"><div class="isn" style="background:rgba(167,139,250,.15);color:var(--pu)">1</div><span>Open the downloaded file in <b>Chrome</b></span></div>'+
+  '<div class="ist"><div class="isn" style="background:rgba(167,139,250,.15);color:var(--pu)">2</div><span>Look for <b>&#10753; install icon</b> on the right side of address bar</span></div>'+
+  '<div class="ist"><div class="isn" style="background:rgba(167,139,250,.15);color:var(--pu)">3</div><span>Click it &#8594; Click <b>Install</b> &#10003;</span></div></div>'+
+  '<button class="btn btng" onclick="dlApp();cM()"><i class="ti ti-download"></i>Download App File</button>'+
+  '<button class="gbt" onclick="cM()">Close</button>');
+}
+
+// ═══════════ INIT ═══════════
+document.getElementById('hdate').textContent=new Date().toLocaleDateString('en-PK',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+document.getElementById('wbp').addEventListener('input',pC);
+document.getElementById('wsp').addEventListener('input',pC);
+apC(); rAll();
+
+function apC(){
+  var name=C.storeName||'WatchPro';
+  document.getElementById('hname').textContent=name;
+  document.getElementById('sname').textContent=name;
+  document.getElementById('awT').content=name;
+  document.title=name;
+  var hi=document.getElementById('hico');
+  if(C.logoDataUrl){hi.innerHTML='<img src="'+C.logoDataUrl+'" alt="logo">';}
+  else{hi.innerHTML='<span>'+String.fromCodePoint(0x231A)+'</span>';hi.querySelector('span').textContent=C.logoEmoji||'\u231A';}
+  var hex=C.accentColor||'#00C896';
+  var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  document.documentElement.style.setProperty('--gr',hex);
+  document.documentElement.style.setProperty('--grd','rgba('+r+','+g+','+b+',.12)');
+  document.documentElement.style.setProperty('--grt',hex);
+  document.getElementById('thm').content=hex;
+  // also update gradient on logo
+  var li=document.getElementById('hico');
+  if(!C.logoDataUrl) li.style.background='linear-gradient(135deg,'+hex+','+hex+'cc)';
+}
+
+function toast(msg,t){t=t||'ok';var el=document.getElementById('tst');el.textContent=msg;el.className='tst on '+t;clearTimeout(el._t);el._t=setTimeout(function(){el.className='tst';},2800);}
+// fix id
+document.getElementById('tst').id='tst';
+
+function oM(html){document.getElementById('ma').innerHTML='<div class="ov" onclick="if(event.target===this)cM()"><div class="mb">'+html+'</div></div>';}
+function cM(){document.getElementById('ma').innerHTML='';}
+function gp(n,el){document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});document.getElementById('pg-'+n).classList.add('on');el.classList.add('on');cM();}
+
+var pc=function(p){return p>=30?'var(--gr)':p>=15?'var(--or)':'var(--re)';};
+var pb=function(p){return p>=30?'bgg':p>=15?'bgo':'bgr';};
+var Rs=function(n){return 'Rs '+Math.round(n).toLocaleString();};
+var td=function(){return new Date().toISOString().slice(0,10);};
+
+function pC(){
+  var b=parseFloat(document.getElementById('wbp').value),s=parseFloat(document.getElementById('wsp').value);
+  var el=document.getElementById('pp');
+  if(b>0&&s>0){var p=((s-b)/b*100).toFixed(1);el.style.color=p>0?'var(--gr)':'var(--re)';el.textContent=(p>0?'\u2705 Profit: ':'\u274C Loss: ')+Rs(s-b)+' per watch ('+p+'% margin)';}
+  else{el.style.color='var(--t3)';el.textContent='Enter buy & sell price \u2014 profit preview will appear here';}
+}
+
+function addW(){
+  var n=document.getElementById('wn').value.trim(),br=document.getElementById('wb').value.trim(),mo=document.getElementById('wmo').value.trim();
+  var q=parseInt(document.getElementById('wq').value),bp=parseFloat(document.getElementById('wbp').value),sp=parseFloat(document.getElementById('wsp').value);
+  if(!n||!br||!q||!bp||!sp){toast('\u26A0\uFE0F Fill all required (*) fields','er');return;}
+  W.push({id:Date.now(),name:n,brand:br,model:mo,qty:q,buy:bp,sell:sp});
+  sv();['wn','wb','wmo','wq','wbp','wsp'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('pp').textContent='Enter buy & sell price \u2014 profit preview will appear here';
+  document.getElementById('pp').style.color='var(--t3)';
+  rAll();gp('st',document.querySelectorAll('.nb')[1]);toast('\u2705 '+n+' added!');
+}
+
+function oSale(id){
+  var w=W.find(function(x){return x.id===id;});var p=((w.sell-w.buy)/w.buy*100).toFixed(1);
+  oM('<div class="mhd"></div><div class="mt"><i class="ti ti-shopping-cart" style="color:var(--gr)"></i>Record Sale</div>'+
+  '<div style="font-size:15px;font-weight:800;margin-bottom:4px">'+w.name+'</div>'+
+  '<div style="font-size:12px;color:var(--t3);margin-bottom:13px">Stock: <b style="color:var(--t1)">'+w.qty+' pcs</b> &nbsp;&middot;&nbsp; Normal margin: <b style="color:var(--gr)">'+p+'%</b></div>'+
+  '<div class="sl">Quantity to Sell</div>'+
+  '<div class="qc"><button class="qb" onclick="_q=Math.max(1,_q-1);document.getElementById('qv').textContent=_q;uSI()">&#8722;</button><span class="qv" id="qv">1</span><button class="qb" onclick="_q=Math.min('+w.qty+',_q+1);document.getElementById('qv').textContent=_q;uSI()">+</button></div>'+
+  '<div class="fr2"><div class="fg"><label>Sell Price (Rs)</label><input class="fi" type="number" id="sp" value="'+w.sell+'" inputmode="numeric" oninput="uSI()"></div><div class="fg"><label>Discount %</label><input class="fi" type="number" id="sd" value="0" min="0" max="100" inputmode="numeric" oninput="aDisc('+w.sell+')"></div></div>'+
+  '<div class="pbx" id="sb"></div>'+
+  '<button class="btn btng" style="margin-top:0" onclick="cSale('+id+')"><i class="ti ti-check"></i>Confirm Sale</button>'+
+  '<button class="gbt" onclick="cM()">Cancel</button>');
+  window._q=1;window._sw=w;uSI();
+}
+function aDisc(base){var d=parseFloat(document.getElementById('sd').value)||0;document.getElementById('sp').value=Math.round(base*(1-d/100));uSI();}
+function uSI(){if(!document.getElementById('sp'))return;var p=parseFloat(document.getElementById('sp').value)||window._sw.sell,q=window._q,w=window._sw;var pr=(p-w.buy)*q,pct=((p-w.buy)/w.buy*100).toFixed(1),d=parseFloat(document.getElementById('sd').value)||0;var el=document.getElementById('sb');el.style.color=pr>=0?'var(--gr)':'var(--re)';el.textContent='Total: '+Rs(p*q)+' | Profit: '+Rs(Math.abs(pr))+' ('+pct+'%)'+(d>0?' \u2014 \uD83C\uDFF7\uFE0F '+d+'% off':'');}
+function cSale(id){var w=W.find(function(x){return x.id===id;}),q=window._q,p=parseFloat(document.getElementById('sp').value),d=parseFloat(document.getElementById('sd').value)||0;if(!p){toast('Enter price!','er');return;}if(q>w.qty){toast('Not enough stock!','er');return;}w.qty-=q;S.push({id:Date.now(),wId:id,wName:w.name,brand:w.brand,qty:q,price:p,buyP:w.buy,profit:(p-w.buy)*q,pct:((p-w.buy)/w.buy*100),disc:d,time:new Date()});sv();cM();rAll();toast('\u2705 Sale recorded!');}
+
+function oStk(id){var w=W.find(function(x){return x.id===id;});oM('<div class="mhd"></div><div class="mt"><i class="ti ti-adjustments" style="color:var(--bl)"></i>Adjust Stock</div><div style="font-size:15px;font-weight:800;margin-bottom:4px">'+w.name+'</div><div style="font-size:12px;color:var(--t3);margin-bottom:17px">Current: <b style="color:var(--t1);font-size:15px">'+w.qty+' pcs</b></div><div class="sl">Add Stock &#8212; New Arrival</div><div class="fg"><label>Quantity</label><input class="fi" type="number" id="aq" placeholder="e.g. 5" min="1" inputmode="numeric"></div><button class="btn btnb" onclick="dStk('+id+','a')"><i class="ti ti-plus"></i>Add Stock</button><div class="dv"></div><div class="sl">Remove Stock &#8212; Damaged / Returned</div><div class="fg"><label>Quantity</label><input class="fi" type="number" id="rq" placeholder="e.g. 2" min="1" inputmode="numeric"></div><button class="btn btnr" onclick="dStk('+id+','r')"><i class="ti ti-minus"></i>Remove Stock</button><button class="gbt" onclick="cM()">Cancel</button>');}
+function dStk(id,t){var w=W.find(function(x){return x.id===id;}),q=parseInt(document.getElementById(t==='a'?'aq':'rq').value);if(!q||q<1){toast('Enter quantity!','er');return;}if(t==='r'&&q>w.qty){toast('Not enough stock!','er');return;}w.qty+=t==='a'?q:-q;sv();cM();rAll();toast(t==='a'?'\uD83D\uDCE6 Stock added!':'\uD83D\uDDD1\uFE0F Stock removed!');}
+
+function oEdit(id){var w=W.find(function(x){return x.id===id;});oM('<div class="mhd"></div><div class="mt"><i class="ti ti-edit" style="color:var(--or)"></i>Edit Watch</div><div class="fg"><label>Name</label><input class="fi" type="text" id="en" value="'+w.name+'"></div><div class="fr2"><div class="fg"><label>Brand</label><input class="fi" type="text" id="eb" value="'+w.brand+'"></div><div class="fg"><label>Model</label><input class="fi" type="text" id="emo" value="'+(w.model||'')+'"></div></div><div class="fr2"><div class="fg"><label>Buy Price</label><input class="fi" type="number" id="ebp" value="'+w.buy+'" inputmode="numeric"></div><div class="fg"><label>Sell Price</label><input class="fi" type="number" id="esp" value="'+w.sell+'" inputmode="numeric"></div></div><button class="btn btno" onclick="sEdit('+id+')"><i class="ti ti-check"></i>Save Changes</button><button class="gbt r" onclick="dW('+id+')"><i class="ti ti-trash"></i>Delete Watch</button><button class="gbt" onclick="cM()">Cancel</button>');}
+function sEdit(id){var w=W.find(function(x){return x.id===id;});w.name=document.getElementById('en').value.trim()||w.name;w.brand=document.getElementById('eb').value.trim()||w.brand;w.model=document.getElementById('emo').value.trim();w.buy=parseFloat(document.getElementById('ebp').value)||w.buy;w.sell=parseFloat(document.getElementById('esp').value)||w.sell;sv();cM();rAll();toast('\u2705 Watch updated!');}
+function dW(id){if(!confirm('Delete this watch?'))return;W=W.filter(function(x){return x.id!==id;});sv();cM();rAll();toast('\uD83D\uDDD1\uFE0F Deleted!');}
+
+function undoS(sid){if(!confirm('Remove this sale? Stock will be restored.'))return;var s=S.find(function(x){return x.id===sid;});if(!s)return;var w=W.find(function(x){return x.id===s.wId;});if(w)w.qty+=s.qty;S=S.filter(function(x){return x.id!==sid;});sv();rAll();toast('\u21A9\uFE0F Sale removed!');}
+
+function sF(f,el){fil=f;document.querySelectorAll('.ft').forEach(function(t){t.classList.remove('on');});el.classList.add('on');rSales();}
+function fS(){var now=new Date();if(fil==='today')return S.filter(function(s){return new Date(s.time).toDateString()===now.toDateString();});if(fil==='week'){var w=new Date(now);w.setDate(now.getDate()-7);return S.filter(function(s){return new Date(s.time)>=w;});}if(fil==='month')return S.filter(function(s){var d=new Date(s.time);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});return S;}
+
+function oExp(){oM('<div class="mhd"></div><div class="mt"><i class="ti ti-download" style="color:var(--bl)"></i>Export Data</div><div class="exr" onclick="dExp('sales')"><div class="exi" style="background:rgba(0,200,150,.1)"><i class="ti ti-table" style="color:var(--gr)"></i></div><div><div class="exT">Sales History &#8212; CSV</div><div class="exS">Open in Excel &#183; all recorded sales</div></div></div><div class="exr" onclick="dExp('stock')"><div class="exi" style="background:var(--ord)"><i class="ti ti-package" style="color:var(--or)"></i></div><div><div class="exT">Stock List &#8212; CSV</div><div class="exS">All watches &#183; prices, qty, profit</div></div></div><div class="exr" onclick="dExp('json')"><div class="exi" style="background:var(--bld)"><i class="ti ti-database" style="color:var(--bl)"></i></div><div><div class="exT">Full Backup &#8212; JSON</div><div class="exS">Complete data &#183; can be re-imported</div></div></div><button class="gbt" onclick="cM()">Cancel</button>');}
+function dExp(t){var cont,fn,mt;if(t==='sales'){cont='Watch,Brand,Qty,Sell Price,Buy Price,Profit,Margin%,Discount%,Date\n'+S.map(function(s){return '"'+s.wName+'","'+(s.brand||'')+'",'+s.qty+','+s.price+','+(s.buyP||'')+','+Math.round(s.profit)+','+(s.pct||0).toFixed(1)+','+(s.disc||0)+',"'+new Date(s.time).toLocaleDateString()+'"';}).join('\n');fn='sales_'+td()+'.csv';mt='text/csv';}else if(t==='stock'){cont='Name,Brand,Model,Qty,Buy Price,Sell Price,Profit/Watch,Margin%,Stock Value\n'+W.map(function(w){return '"'+w.name+'","'+w.brand+'","'+(w.model||'')+'",'+w.qty+','+w.buy+','+w.sell+','+Math.round(w.sell-w.buy)+','+((w.sell-w.buy)/w.buy*100).toFixed(1)+','+Math.round(w.qty*w.buy);}).join('\n');fn='stock_'+td()+'.csv';mt='text/csv';}else{cont=JSON.stringify({watches:W,sales:S,cfg:C,v:'3.0',at:new Date().toISOString()},null,2);fn='watchpro_backup_'+td()+'.json';mt='application/json';}var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([cont],{type:mt}));a.download=fn;a.click();URL.revokeObjectURL(a.href);cM();toast('\uD83D\uDCCA Exported: '+fn);}
+function doImp(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(!d.watches){toast('Invalid file!','er');return;}if(!confirm('Import '+d.watches.length+' watches and '+(d.sales||[]).length+' sales?\nCurrent data will be replaced.'))return;W=d.watches;S=(d.sales||[]).map(function(s){return Object.assign({},s,{time:new Date(s.time)});});C=d.cfg||{};sv();apC();rAll();toast('\u2705 Data imported!');}catch(err){toast('Could not read file!','er');}};r.readAsText(f);e.target.value='';}
+function clrAll(){if(!confirm('DELETE ALL DATA? Watches + Sales \u2014 permanent!'))return;if(!confirm('Final confirm \u2014 CANNOT be undone.'))return;W=[];S=[];sv();rAll();toast('\uD83D\uDDD1\uFE0F All data cleared','er');}
+
+function openLogo(){
+  var em=C.logoEmoji||'\u231A',name=C.storeName||'WatchPro',col=C.accentColor||'#00C896',hi=!!C.logoDataUrl;
+  var emHtml=EMOJIS.map(function(e){return '<button class="eb'+(e===em&&!hi?' on':'')+'" onclick="sEmo(''+e+'')" style="font-size:21px">'+e+'</button>';}).join('');
+  var swHtml=COLS.map(function(c){return '<div class="sw'+(c.h===col?' on':'')+'" style="background:'+c.h+'" onclick="sCl(''+c.h+'')" title="'+c.n+'"></div>';}).join('');
+  oM('<div class="mhd"></div><div class="mt"><i class="ti ti-building-store" style="color:var(--gr)"></i>Store Identity</div>'+
+  '<div class="lpv"><div class="lpi" id="lpi" style="background:linear-gradient(135deg,'+col+','+col+'aa)">'+(hi?'<img src="'+C.logoDataUrl+'">':em)+'</div><div class="lpn" id="lpn">'+name+'</div><div class="lpt">Live Preview</div></div>'+
+  '<div class="fg"><label>Store Name</label><input class="fi" type="text" id="ln" value="'+name+'" placeholder="e.g. City Watches" oninput="document.getElementById('lpn').textContent=this.value||'Store Name'"></div>'+
+  '<div class="sl">Upload Logo from Gallery</div>'+
+  '<div class="upa '+(hi?'hi':'')+'" id="upa" onclick="document.getElementById('lgf').click()">'+(hi?'<img class="upimg" src="'+C.logoDataUrl+'"><button class="rmb" onclick="event.stopPropagation();rmL()"><i class="ti ti-trash"></i>Remove</button><div class="upt" style="color:var(--grt)">&#10003; Custom logo active</div>':'<i class="ti ti-photo-plus" style="font-size:34px;color:var(--t3);display:block;margin-bottom:7px"></i><div class="upt">Tap to choose from gallery</div><div class="ups">JPG, PNG, any image</div>')+'</div>'+
+  '<div class="sl">&#8212; Or pick an Emoji &#8212;</div>'+
+  '<div class="egg">'+emHtml+'</div>'+
+  '<div class="sl">App Theme Color</div>'+
+  '<div class="swg">'+swHtml+'</div>'+
+  '<button class="btn btng" onclick="saveLogo()"><i class="ti ti-check"></i>Save Settings</button>'+
+  '<button class="gbt" onclick="cM()">Cancel</button>');
+  window._em=em;window._col=col;window._iu=undefined;
+}
+function onLI(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){window._iu=ev.target.result;var a=document.getElementById('upa');if(a){a.classList.add('hi');a.innerHTML='<img class="upimg" src="'+ev.target.result+'"><button class="rmb" onclick="event.stopPropagation();rmL()"><i class="ti ti-trash"></i>Remove</button><div class="upt" style="color:var(--grt)">&#10003; Image selected</div>';}var lpi=document.getElementById('lpi');if(lpi)lpi.innerHTML='<img src="'+ev.target.result+'">';document.querySelectorAll('.eb').forEach(function(b){b.classList.remove('on');});};r.readAsDataURL(f);e.target.value='';}
+function rmL(){window._iu=null;var a=document.getElementById('upa');if(a){a.classList.remove('hi');a.innerHTML='<i class="ti ti-photo-plus" style="font-size:34px;color:var(--t3);display:block;margin-bottom:7px"></i><div class="upt">Tap to choose from gallery</div><div class="ups">JPG, PNG, any image</div>';}var lpi=document.getElementById('lpi');if(lpi)lpi.innerHTML=window._em||'\u231A';}
+function sEmo(e){window._em=e;window._iu=null;document.querySelectorAll('.eb').forEach(function(b){b.classList.toggle('on',b.textContent.trim()===e);});var lpi=document.getElementById('lpi');if(lpi)lpi.innerHTML=e;var a=document.getElementById('upa');if(a&&a.classList.contains('hi'))rmL();}
+function sCl(h){window._col=h;document.querySelectorAll('.sw').forEach(function(s){s.classList.toggle('on',s.style.background===h||s.style.background.includes(h));});var lpi=document.getElementById('lpi');if(lpi)lpi.style.background='linear-gradient(135deg,'+h+','+h+'aa)';}
+function saveLogo(){C.storeName=document.getElementById('ln').value.trim()||'WatchPro';C.logoEmoji=window._em||'\u231A';C.accentColor=window._col||'#00C896';if(window._iu!==undefined)C.logoDataUrl=window._iu;sv();apC();cM();rAll();toast('\u2705 Settings saved!');}
+
+function rStock(){
+  var el=document.getElementById('slist'),q=(document.getElementById('sri')&&document.getElementById('sri').value||'').toLowerCase();
+  var list=q?W.filter(function(w){return w.name.toLowerCase().indexOf(q)>-1||w.brand.toLowerCase().indexOf(q)>-1||(w.model||'').toLowerCase().indexOf(q)>-1;}):W;
+  document.getElementById('scnt').textContent=list.length+' / '+W.length;
+  if(!W.length){el.innerHTML='<div class="emp">No watches yet. Use Add tab.</div>';return;}
+  if(!list.length){el.innerHTML='<div class="emp">No results found &#128269;</div>';return;}
+  el.innerHTML=list.map(function(w){var p=((w.sell-w.buy)/w.buy*100).toFixed(1),sc=w.qty===0?'bgr':w.qty<3?'bgo':'bgg',sl=w.qty===0?'Out of Stock':w.qty<3?'&#9888; Low ('+w.qty+')':w.qty+' pcs',bw=Math.min(100,Math.max(0,parseFloat(p)));return '<div class="wi"><div class="wt"><div class="wa"><i class="ti ti-watch"></i></div><div style="flex:1;min-width:0"><div class="wn">'+w.name+'</div><div class="wm">'+w.brand+(w.model?' &middot; '+w.model:'')+'</div></div><div style="flex-shrink:0"><span class="bdg '+sc+'">'+sl+'</span></div></div><div class="pg3"><div><div class="p3l">Buy Price</div><div class="p3v o">'+Rs(w.buy)+'</div></div><div><div class="p3l">Sell Price</div><div class="p3v">'+Rs(w.sell)+'</div></div><div><div class="p3l">Profit/Watch</div><div class="p3v g">'+Rs(w.sell-w.buy)+'</div></div></div><div class="pb"><div class="pbt"><div class="pbf" style="width:'+bw+'%;background:'+pc(parseFloat(p))+'"></div></div><div class="pbl"><span>Profit Margin</span><span style="color:'+pc(parseFloat(p))+'">'+p+'%</span></div></div><div class="ar">'+(w.qty>0?'<button class="ab abs" onclick="oSale('+w.id+')"><i class="ti ti-shopping-cart"></i>Sell</button>':'')+'<button class="ab abt" onclick="oStk('+w.id+')"><i class="ti ti-adjustments"></i>Stock</button><button class="ab abe" onclick="oEdit('+w.id+')"><i class="ti ti-edit"></i>Edit</button></div></div>';}).join('');}
+
+function rDash(){
+  var tQ=W.reduce(function(a,w){return a+w.qty;},0),tV=W.reduce(function(a,w){return a+w.qty*w.buy;},0),tP=S.reduce(function(a,s){return a+s.profit;},0),avg=W.length?W.reduce(function(a,w){return a+((w.sell-w.buy)/w.buy*100);},0)/W.length:0;
+  document.getElementById('m1').textContent=tQ;document.getElementById('m2').textContent=Rs(tV);document.getElementById('m3').textContent=Rs(tP);document.getElementById('m4').textContent=avg.toFixed(1)+'%';
+  document.getElementById('hpill').textContent=Rs(tP)+' profit';
+  var mx=Math.max.apply(null,W.map(function(w){return (w.sell-w.buy)/w.buy*100;}).concat([1]));
+  document.getElementById('dchart').innerHTML=W.length?W.map(function(w){var p=((w.sell-w.buy)/w.buy*100).toFixed(1);return '<div class="br_w"><div class="br_l">'+w.name+'</div><div class="br_t"><div class="br_f" style="width:'+Math.round(parseFloat(p)/mx*100)+'%;background:'+pc(parseFloat(p))+'"></div></div><div class="br_v" style="color:'+pc(parseFloat(p))+'">'+p+'%</div></div>';}).join(''):'<div class="emp">No watches yet</div>';
+  var low=W.filter(function(w){return w.qty<3;});
+  document.getElementById('dlow').innerHTML=low.length?low.map(function(w){return '<div class="lowr"><div><div style="font-size:14px;font-weight:700">'+w.name+'</div><div style="font-size:12px;color:var(--t3)">'+w.brand+'</div></div><span class="bdg '+(w.qty===0?'bgr':'bgo')+'">'+(w.qty===0?'Out of Stock':'Only '+w.qty+' left')+'</span></div>';}).join(''):'<div class="emp">All stock levels OK &#10003;</div>';}
+
+function rSales(){
+  var f=fS(),rev=f.reduce(function(a,s){return a+s.price*s.qty;},0),prof=f.reduce(function(a,s){return a+s.profit;},0);
+  document.getElementById('s1').textContent=f.length;document.getElementById('s2').textContent=Rs(rev);document.getElementById('s3').textContent=Rs(prof);
+  var el=document.getElementById('slog');
+  if(!f.length){el.innerHTML='<div class="emp">No sales in this period.</div>';return;}
+  el.innerHTML=f.slice().reverse().map(function(s){var d=new Date(s.time),ds=d.toLocaleDateString('en-PK',{day:'numeric',month:'short'})+' &middot; '+d.toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit'}),p=(s.pct||0).toFixed(1);return '<div class="sr"><button class="und" onclick="undoS('+s.id+')"><i class="ti ti-arrow-back-up"></i> Undo</button><div style="padding-right:60px"><div style="font-size:14px;font-weight:700">'+s.wName+'</div><div style="font-size:12px;color:var(--t3);margin-top:2px">'+s.qty+' watch &middot; '+Rs(s.price)+' each &middot; '+ds+'</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px"><span class="bdg '+pb(parseFloat(p))+'">'+p+'% margin</span>'+(s.disc>0?'<span style="background:rgba(167,139,250,.15);color:var(--pu);border-radius:7px;padding:3px 8px;font-size:11px;font-weight:700">&#127991;&#65039; '+s.disc+'% off</span>':'')+'</div></div><div style="position:absolute;top:12px;right:60px;text-align:right"><div style="font-size:15px;font-weight:800">'+Rs(s.price*s.qty)+'</div><div style="font-size:12px;font-weight:700;color:'+(s.profit>=0?'var(--gr)':'var(--re)')+';">'+(s.profit>=0?'+':'&#8722;')+Rs(Math.abs(s.profit))+'</div></div></div>';}).join('');}
+
+function rAll(){rDash();rStock();rSales();}
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      console.log('SW registered');
+    }).catch(function(e){ console.log('SW failed', e); });
+  });
+}
+// PWA install prompt
+window._dInst = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  window._dInst = e;
+  // Show install banner if visible
+  var ib = document.getElementById('instBanner');
+  if(ib) ib.style.display = 'flex';
+});
+window.addEventListener('appinstalled', function(){
+  var ib = document.getElementById('instBanner');
+  if(ib) ib.style.display = 'none';
+  toast('\u2705 App installed on home screen!');
+});
+function triggerInstall(){
+  if(window._dInst){
+    window._dInst.prompt();
+    window._dInst.userChoice.then(function(r){
+      if(r.outcome==='accepted'){ toast('\u2705 Installing...'); }
+      window._dInst = null;
+    });
+  } else {
+    showGuide();
+  }
+}
+</script>
+</body>
+</html>
